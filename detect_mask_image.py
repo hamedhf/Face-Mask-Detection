@@ -9,7 +9,7 @@ import numpy as np
 import argparse
 import cv2
 import os
-def mask_image():
+def mask_image(image_path: str = None):
 	# construct the argument parser and parse the arguments
 	ap = argparse.ArgumentParser()
 	ap.add_argument("-i", "--image", required=True,
@@ -37,7 +37,8 @@ def mask_image():
 
 	# load the input image from disk, clone it, and grab the image spatial
 	# dimensions
-	image = cv2.imread(args["image"])
+	path = args["image"] if image_path is None else image_path
+	image = cv2.imread(path)
 	orig = image.copy()
 	(h, w) = image.shape[:2]
 
@@ -50,6 +51,7 @@ def mask_image():
 	net.setInput(blob)
 	detections = net.forward()
 
+	main_label = None
 	# loop over the detections
 	for i in range(0, detections.shape[2]):
 		# extract the confidence (i.e., probability) associated with
@@ -88,7 +90,7 @@ def mask_image():
 			color = (0, 255, 0) if label == "Mask" else (0, 0, 255)
 
 			# include the probability in the label
-			label = "{}: {:.2f}%".format(label, max(mask, withoutMask) * 100)
+			main_label = label = "{}: {:.2f}%".format(label, max(mask, withoutMask) * 100)
 
 			# display the label and bounding box rectangle on the output
 			# frame
@@ -97,8 +99,9 @@ def mask_image():
 			cv2.rectangle(image, (startX, startY), (endX, endY), color, 2)
 
 	# show the output image
-	cv2.imshow("Output", image)
-	cv2.waitKey(0)
-	
+	# cv2.imshow("Output", image)
+	# cv2.waitKey(0)
+	return main_label
+
 if __name__ == "__main__":
 	mask_image()
