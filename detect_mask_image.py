@@ -9,7 +9,7 @@ import numpy as np
 import argparse
 import cv2
 import os
-def mask_image(image_path: str = None):
+def mask_image(input_image = None):
 	# construct the argument parser and parse the arguments
 	ap = argparse.ArgumentParser()
 	ap.add_argument("-i", "--image", required=True,
@@ -37,8 +37,7 @@ def mask_image(image_path: str = None):
 
 	# load the input image from disk, clone it, and grab the image spatial
 	# dimensions
-	path = args["image"] if image_path is None else image_path
-	image = cv2.imread(path)
+	image = cv2.imread(args["image"]) if input_image is None else input_image
 	orig = image.copy()
 	(h, w) = image.shape[:2]
 
