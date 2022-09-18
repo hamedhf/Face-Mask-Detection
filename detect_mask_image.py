@@ -131,7 +131,7 @@ def mask_detector(input_image = None):
 	net.setInput(blob)
 	detections = net.forward()
 
-	main_label = None
+	main_label = 'No mask'
 	# loop over the detections
 	for i in range(0, detections.shape[2]):
 		# extract the confidence (i.e., probability) associated with
