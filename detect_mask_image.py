@@ -101,39 +101,39 @@ def mask_image():
 	# cv2.waitKey(0)
 
 def mask_detector(input_image = None):
-	args = {
-		'face': 'face_detector',
-		'confidence': 0.5
-	}
-
-	# load our serialized face detector model from disk
-	print("[INFO] loading face detector model...")
-	prototxtPath = '/content/Face-Mask-Detection/face_detector/deploy.prototxt'
-	weightsPath = '/content/Face-Mask-Detection/face_detector/res10_300x300_ssd_iter_140000.caffemodel'
-	net = cv2.dnn.readNet(prototxtPath, weightsPath)
-
-	# load the face mask detector model from disk
-	print("[INFO] loading face mask detector model...")
-	model = load_model('/content/Face-Mask-Detection/mask_detector.model')
-
-	# load the input image from disk, clone it, and grab the image spatial
-	# dimensions
-	image = input_image
-	orig = image.copy()
-	(h, w) = image.shape[:2]
-
-	# construct a blob from the image
-	blob = cv2.dnn.blobFromImage(image, 1.0, (300, 300),
-		(104.0, 177.0, 123.0))
-
-	# pass the blob through the network and obtain the face detections
-	print("[INFO] computing face detections...")
-	net.setInput(blob)
-	detections = net.forward()
-
-	main_label = 'No mask'
-	# loop over the detections
 	try:
+		args = {
+			'face': 'face_detector',
+			'confidence': 0.5
+		}
+
+		# load our serialized face detector model from disk
+		print("[INFO] loading face detector model...")
+		prototxtPath = '/content/Face-Mask-Detection/face_detector/deploy.prototxt'
+		weightsPath = '/content/Face-Mask-Detection/face_detector/res10_300x300_ssd_iter_140000.caffemodel'
+		net = cv2.dnn.readNet(prototxtPath, weightsPath)
+
+		# load the face mask detector model from disk
+		print("[INFO] loading face mask detector model...")
+		model = load_model('/content/Face-Mask-Detection/mask_detector.model')
+
+		# load the input image from disk, clone it, and grab the image spatial
+		# dimensions
+		image = input_image
+		orig = image.copy()
+		(h, w) = image.shape[:2]
+
+		# construct a blob from the image
+		blob = cv2.dnn.blobFromImage(image, 1.0, (300, 300),
+			(104.0, 177.0, 123.0))
+
+		# pass the blob through the network and obtain the face detections
+		print("[INFO] computing face detections...")
+		net.setInput(blob)
+		detections = net.forward()
+
+		main_label = 'No mask'
+		# loop over the detections
 		for i in range(0, detections.shape[2]):
 			# extract the confidence (i.e., probability) associated with
 			# the detection
@@ -181,10 +181,10 @@ def mask_detector(input_image = None):
 	except Exception:
 		print("Error in mask detection. Returning No mask label.")
 
-	# show the output image
-	# cv2.imshow("Output", image)
-	# cv2.waitKey(0)
-	return main_label
+		# show the output image
+		# cv2.imshow("Output", image)
+		# cv2.waitKey(0)
+		return main_label
 
 if __name__ == "__main__":
 	mask_image()
