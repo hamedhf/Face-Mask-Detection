@@ -101,6 +101,7 @@ def mask_image():
 	# cv2.waitKey(0)
 
 def mask_detector(input_image = None):
+	main_label = 'No mask'
 	try:
 		args = {
 			'face': 'face_detector',
@@ -132,7 +133,6 @@ def mask_detector(input_image = None):
 		net.setInput(blob)
 		detections = net.forward()
 
-		main_label = 'No mask'
 		# loop over the detections
 		for i in range(0, detections.shape[2]):
 			# extract the confidence (i.e., probability) associated with
